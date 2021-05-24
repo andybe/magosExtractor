@@ -64,7 +64,8 @@ protected:
         "Wow.exe",
         "WoW.exe",
         "World of Warcraft.exe",
-        "World of Warcraft.app/Contents/MacOS/World of Warcraft"};
+        "World of Warcraft.app/Contents/MacOS/World of Warcraft",
+        "World of Warcraft-64.app/Contents/MacOS/World of Warcraft-64"};
 
     const vector<string> kGameLocales{"deDE", "enCN", "enGB", "enTW", "enUS", "esES", "esMX", "frFR", "itIT", "koKR", "ruRU", "zhCN", "zhTW"};
 

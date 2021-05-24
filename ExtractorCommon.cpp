@@ -30,6 +30,9 @@
 
 using namespace std;
 
+constexpr uint32_t
+ExtractorCommon::kCientIdenties[];
+
 uint32_t
 ExtractorCommon::getClientIdentiy(const char *path)
 {
