@@ -47,12 +47,11 @@ public:
         CLIENT_UNKNOWN = 255,
     };
 
-
 protected:
-    /** where to open **/
+
     uint32_t getClientIdentiy(const char *path);
     CoreNumber getCoreNumberByClientIdentiy(uint32_t client_identity);
-    void showBanner(const std::string& sTitle, int iCoreNumber);
+    void showBanner(const std::string& sTitle, int iCoreNumber = 255);
 
     const string kTitles [7] { "Classic", "The Burning Bruscade", "Warth of the Lich King", "Cataclym", "Mist of Pandaria","Warlords of Draenor", "Legion"};
                                            

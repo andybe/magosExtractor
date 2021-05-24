@@ -58,6 +58,7 @@ class MapExtractor : ExtractorCommon {
  */
 MapExtractor::MapExtractor(int argc, char **argv)
 {
+    showBanner("map-extractor");
 
     try
     {

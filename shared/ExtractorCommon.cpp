@@ -46,7 +46,7 @@ ExtractorCommon::getClientIdentiy(const char *path)
     {
         stringstream filename;
         filename << path << "/" << kGameBinaries[i];
-        exec_clients << kGameBinaries[i] << " ";
+        exec_clients << "'" << kGameBinaries[i] << "'" << " ";
         rf = new ifstream();
         rf->open(filename.str(), ios::out | ios::binary);
         if (rf->is_open())
@@ -200,43 +200,50 @@ ExtractorCommon::getCoreNumberByClientIdentiy(uint32_t ci)
 *  @PARAM iCoreNumber is the Core Number
 */
 void
- ExtractorCommon::showBanner(const std::string& sTitle, int iCoreNumber)
+ ExtractorCommon::showBanner(const string& sTitle, int iCoreNumber)
 {
-    std::cout << \
-        "        __  __      _  _  ___  ___  ___      " << std::endl << \
-        "       |  \\/  |__ _| \\| |/ __|/ _ \\/ __|  " << std::endl << \
-        "       | |\\/| / _` | .` | (_ | (_) \\__ \\  " << std::endl << \
-        "       |_|  |_\\__,_|_|\\_|\\___|\\___/|___/ " << std::endl << \
-        std::endl << \
-        "       " << sTitle << " for ";
+    cout << \
+        "        __  __      _  _  ___  ___  ___      " << endl << \
+        "       |  \\/  |__ _| \\| |/ __|/ _ \\/ __|  " << endl << \
+        "       | |\\/| / _` | .` | (_ | (_) \\__ \\  " << endl << \
+        "       |_|  |_\\__,_|_|\\_|\\___|\\___/|___/ " << endl << \
+        endl << \
+        "       " << sTitle; 
+
+    if (iCoreNumber == 255) {
+        cout << endl << endl;
+        return;
+    }
+
+    cout  << " for ";
 
     switch (iCoreNumber)
     {
     case static_cast<int>(CoreNumber::CLIENT_CLASSIC):
-        std::cout << "MaNGOSZero" << std::endl;
+        cout << "MaNGOSZero" << endl;
         break;
     case static_cast<int>(CoreNumber::CLIENT_TBC):
-        std::cout << "MaNGOSOne" << std::endl;
+        cout << "MaNGOSOne" << endl;
         break;
     case static_cast<int>(CoreNumber::CLIENT_WOTLK):
-        std::cout << "MaNGOSTwo" << std::endl;
+        cout << "MaNGOSTwo" << endl;
         break;
     case static_cast<int>(CoreNumber::CLIENT_CATA):
-        std::cout << "MaNGOSThree" << std::endl;
+        cout << "MaNGOSThree" << endl;
         break;
     case static_cast<int>(CoreNumber::CLIENT_MOP):
-        std::cout << "MaNGOSFour" << std::endl;
+        cout << "MaNGOSFour" << endl;
         break;
     case static_cast<int>(CoreNumber::CLIENT_WOD):
-        std::cout << "MaNGOSFive" << std::endl;
+        cout << "MaNGOSFive" << endl;
         break;
     case static_cast<int>(CoreNumber::CLIENT_LEGION):
-        std::cout << "MaNGOSSix" << std::endl;
+        cout << "MaNGOSSix" << endl;
         break;
     default:
-        std::cout << "Unknown Version" << std::endl;
+        cout << "Unknown Version" << endl;
         break;
     }
-    std::cout << "  ________________________________________________" << std::endl;
+    cout << "  ________________________________________________" << endl;
 
 }
