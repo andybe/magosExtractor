@@ -40,7 +40,7 @@ ExtractorCommon::getClientIdentiy(const char *path)
     /* 
        Find the game binary by name.
     */
-    ifstream *rf;
+    ifstream *rf = nullptr;
     stringstream exec_clients;
     for (int i = 0; i < kGameBinaries.size(); i++)
     {
