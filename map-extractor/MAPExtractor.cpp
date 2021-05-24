@@ -100,8 +100,8 @@ MapExtractor::MapExtractor(int argc, char **argv)
                     throw invalid_argument("extract parameter must be between 1-3");
                 }
 
-                if (extract_parts == 3 || extract_parts == 2 ) extract_dbc = true;
                 if (extract_parts == 3 || extract_parts == 1 ) extract_maps = true;
+                if (extract_parts == 3 || extract_parts == 2 ) extract_dbc = true;
             }
             else if (arg->compare("-h") == 0 || arg->compare("--help") == 0)
             {
