@@ -63,24 +63,6 @@ ExtractorCommon::getClientIdentiy(const char *path)
         exit(1);
     }
 
-    /* 
-       Figure out the build number inside the binary
-    */
-    unsigned char jumpBytesBuffer[128];
-    // jump over as much of the file as possible,
-    // before we start searching for the build number
-    for (int i = 0; i < 3300; i++)
-    {
-        if (rf->good())
-            rf->read((char *)jumpBytesBuffer, sizeof(jumpBytesBuffer));
-        else {
-            rf->close();
-            delete(rf);
-            cout << "Game binary to short! Fail to jump to the base." << endl;
-            exit(1);
-        }
-    }
-
     /** identity byte **/
     unsigned char byteSearchBuffer[1];
 
