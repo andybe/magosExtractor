@@ -22,6 +22,9 @@
  * and lore are copyrighted by Blizzard Entertainment, Inc.
  */
 #include <iostream>
+#include <sstream>
+#include <fstream>
+
 #include "ExtractorCommon.hh"
 
 using namespace std;
@@ -35,6 +38,7 @@ class MapExtractor : ExtractorCommon {
         bool hasGameIdenty();
 
     private:
+        uint32_t client_identy;
         // more data 
         bool map_float_to_int = false;
         // all dbc & maps
@@ -47,6 +51,8 @@ class MapExtractor : ExtractorCommon {
         string *output_path = new string("."); 
 
         void Usage(const char *);
+
+        void LoadCommonMPQFiles(CoreNumber);
 
 };
 
@@ -69,6 +75,7 @@ MapExtractor::MapExtractor(int argc, char **argv)
             {
                 i++;
                 input_path = new string(argv[i]);
+                cout << input_path << endl;
             }
             else if (arg->compare("-o") == 0 || arg->compare("--output") == 0)
             {
@@ -149,14 +156,42 @@ MapExtractor::Usage(const char *exec)
 bool 
 MapExtractor::hasGameIdenty()
 {
-    getClientIdentiy(input_path->c_str());
-    return false;
+    client_identy = getClientIdentiy(input_path->c_str());
+    LoadCommonMPQFiles(getCoreNumberByClientIdentiy(client_identy));
+    return (client_identy ? true : false);
+}
+
+void MapExtractor::LoadCommonMPQFiles(CoreNumber core)
+{
+    std::stringstream filename;
+    ifstream *rf = nullptr;
+
+    vector<string> kList = MPQList[static_cast<int>(core)];
+
+    for(int i=0; i < kGameLocales.size();i++) {
+        filename.str("");
+        filename << input_path->c_str() << "/Data/" << kGameLocales[i] << "/locale-" << kGameLocales[i] << ".MPQ";
+
+        rf = new ifstream();
+        rf->open(filename.str(), ios::out | ios::binary);
+        if (rf->is_open())
+        {
+            rf->close();
+            delete(rf);
+            break;
+        }
+        delete (rf);
+        rf = nullptr;
+    }
+    if (!rf) {
+        cout << "No locales for this client" << endl;
+    }
+
 }
 
 int main(int argc, char **argv)
 {
     MapExtractor extractor( argc,argv);
-
 
     if (!extractor.hasGameIdenty()) {
         exit(1);
