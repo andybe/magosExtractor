@@ -50,7 +50,7 @@ bool DBCFile::open()
     if (!SFileReadFile(fileHandle, header, 4, NULL, NULL))              // Magic header
     {
         SFileCloseFile(fileHandle);
-        cout << "Could not read header in DBCFile  " << filename << endl;
+        cout << "Could not read header in DBCFile  " << filename << "." << endl;
         return false;
     }
 
