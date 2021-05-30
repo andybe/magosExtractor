@@ -49,9 +49,13 @@ public:
 
 protected:
 
+    void showWebsiteBanner();
+    void showBanner(const std::string& sTitle, int iCoreNumber = 255);
+
+    ifstream * fileExist(const std::string& filename);
+
     uint32_t getClientIdentiy(const char *path);
     CoreNumber getCoreNumberByClientIdentiy(uint32_t client_identity);
-    void showBanner(const std::string& sTitle, int iCoreNumber = 255);
 
     const string kTitles [7] { "Classic", "The Burning Bruscade", "Warth of the Lich King", "Cataclym", "Mist of Pandaria","Warlords of Draenor", "Legion"};
                                            
@@ -66,7 +70,7 @@ protected:
         "World of Warcraft.app/Contents/MacOS/World of Warcraft",
         "World of Warcraft-64.app/Contents/MacOS/World of Warcraft-64"};
 
-    const vector<string> kGameLocales{"deDE", "enCN", "enGB", "enTW", "enUS", "esES", "esMX", "frFR", "itIT", "koKR", "ruRU", "zhCN", "zhTW"};
+    const vector<string> kGameLocals{"deDE", "enCN", "enGB", "enTW", "enUS", "esES", "esMX", "frFR", "itIT", "koKR", "ruRU", "zhCN", "zhTW"};
 
     const vector<string> MPQList[7] = {{
         /* vanilla */

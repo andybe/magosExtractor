@@ -33,6 +33,84 @@ using namespace std;
 constexpr uint32_t
 ExtractorCommon::kCientIdenties[];
 
+ifstream *
+ExtractorCommon::fileExist(const std::string& filename)
+{
+    ifstream *ifs = new ifstream();
+    ifs->open(filename, ios::out | ios::binary);
+        if (ifs->is_open()) {
+            return ifs;
+        }
+
+    delete(ifs);
+	return nullptr;
+}
+
+
+/**
+*  This function displays the standard mangos banner to the console
+*
+*  @PARAM sTitle is the Title text (directly under the MaNGOS logo)
+*  @PARAM iCoreNumber is the Core Number
+*/
+void
+ExtractorCommon::showBanner(const string& sTitle, int iCoreNumber)
+{
+    cout << \
+        "        __  __      _  _  ___  ___  ___      " << endl << \
+        "       |  \\/  |__ _| \\| |/ __|/ _ \\/ __|  " << endl << \
+        "       | |\\/| / _` | .` | (_ | (_) \\__ \\  " << endl << \
+        "       |_|  |_\\__,_|_|\\_|\\___|\\___/|___/ " << endl << \
+        endl << \
+        "       " << sTitle;
+
+    if (iCoreNumber == 255) {
+        cout << endl << endl;
+        return;
+    }
+
+    cout  << " for ";
+
+    switch (iCoreNumber)
+    {
+    case static_cast<int>(CoreNumber::CLIENT_CLASSIC):
+        cout << "MaNGOSZero" << endl;
+        break;
+    case static_cast<int>(CoreNumber::CLIENT_TBC):
+        cout << "MaNGOSOne" << endl;
+        break;
+    case static_cast<int>(CoreNumber::CLIENT_WOTLK):
+        cout << "MaNGOSTwo" << endl;
+        break;
+    case static_cast<int>(CoreNumber::CLIENT_CATA):
+        cout << "MaNGOSThree" << endl;
+        break;
+    case static_cast<int>(CoreNumber::CLIENT_MOP):
+        cout << "MaNGOSFour" << endl;
+        break;
+    case static_cast<int>(CoreNumber::CLIENT_WOD):
+        cout << "MaNGOSFive" << endl;
+        break;
+    case static_cast<int>(CoreNumber::CLIENT_LEGION):
+        cout << "MaNGOSSix" << endl;
+        break;
+    default:
+        cout << "Unknown Version" << endl;
+        break;
+    }
+    cout << "  ________________________________________________" << endl;
+
+}
+void
+ExtractorCommon::showWebsiteBanner()
+{
+    cout << \
+        "  ________________________________________________" << endl << endl << \
+        "    For help and support please visit:            " << endl << \
+        "    Website / Forum / Wiki: https://getmangos.eu  " << endl << \
+        "  ________________________________________________" << endl \
+		<< endl;
+}
 uint32_t
 ExtractorCommon::getClientIdentiy(const char *path)
 {
@@ -47,9 +125,8 @@ ExtractorCommon::getClientIdentiy(const char *path)
         stringstream filename;
         filename << path << "/" << kGameBinaries[i];
         exec_clients << "'" << kGameBinaries[i] << "'" << " ";
-        rf = new ifstream();
-        rf->open(filename.str(), ios::out | ios::binary);
-        if (rf->is_open())
+        rf = fileExist(filename.str());
+        if (rf)
         {
             break;
         }
@@ -58,8 +135,8 @@ ExtractorCommon::getClientIdentiy(const char *path)
     }
     if (!rf)
     {
-        cout << "Game binary not found (one of)!" << endl;
-        cout << "( " << exec_clients.str() << ")";
+        cout << " Game binary not found (one of)!" << endl;
+        cout << " ( " << exec_clients.str() << ")";
         exit(1);
     }
 
@@ -140,20 +217,20 @@ ExtractorCommon::getClientIdentiy(const char *path)
 
     if (client_identity == 0)
     {
-        cout << "Fatal Error: failed to identify build version!" << endl << endl;
-        cout << "Supported build versions:" << endl;
-        cout << "0 - Vanilla: 5875, 6005, 6141" << endl;
-        cout << "1 - TBC:      8606" << endl;
-        cout << "2 - WOTLK:    12340" << endl;
-        cout << "3 - CATA:     15595" << endl;
-        cout << "4 - MOP:      18274/18414 " << endl;
-        cout << "5 - WOD:      20740" << endl;
-        cout << "6 - LEG:      21355" << endl;
-        cout << "Exiting program!!" << endl;
+        cout << " Fatal Error: failed to identify build version!" << endl << endl;
+        cout << " Supported build versions:" << endl;
+        cout << " 0 - Vanilla: 5875, 6005, 6141" << endl;
+        cout << " 1 - TBC:      8606" << endl;
+        cout << " 2 - WOTLK:    12340" << endl;
+        cout << " 3 - CATA:     15595" << endl;
+        cout << " 4 - MOP:      18274/18414 " << endl;
+        cout << " 5 - WOD:      20740" << endl;
+        cout << " 6 - LEG:      21355" << endl;
+        cout << " Exiting program!!" << endl;
         exit(1);
     }
     int core = static_cast<int>(getCoreNumberByClientIdentiy(client_identity));
-    cout << "Client: World of Warcraft - " << kTitles[core] << " (" << client_identity  << ")" <<  endl;
+    cout << " Client: World of Warcraft - " << kTitles[core] << " (" << client_identity  << ")" <<  endl;
 
     return client_identity;
 }
@@ -190,60 +267,4 @@ ExtractorCommon::getCoreNumberByClientIdentiy(uint32_t ci)
     }
 
     return CoreNumber::CLIENT_UNKNOWN;  
-}
-
-
-/**
-*  This function displays the standard mangos banner to the console
-*
-*  @PARAM sTitle is the Title text (directly under the MaNGOS logo)
-*  @PARAM iCoreNumber is the Core Number
-*/
-void
- ExtractorCommon::showBanner(const string& sTitle, int iCoreNumber)
-{
-    cout << \
-        "        __  __      _  _  ___  ___  ___      " << endl << \
-        "       |  \\/  |__ _| \\| |/ __|/ _ \\/ __|  " << endl << \
-        "       | |\\/| / _` | .` | (_ | (_) \\__ \\  " << endl << \
-        "       |_|  |_\\__,_|_|\\_|\\___|\\___/|___/ " << endl << \
-        endl << \
-        "       " << sTitle; 
-
-    if (iCoreNumber == 255) {
-        cout << endl << endl;
-        return;
-    }
-
-    cout  << " for ";
-
-    switch (iCoreNumber)
-    {
-    case static_cast<int>(CoreNumber::CLIENT_CLASSIC):
-        cout << "MaNGOSZero" << endl;
-        break;
-    case static_cast<int>(CoreNumber::CLIENT_TBC):
-        cout << "MaNGOSOne" << endl;
-        break;
-    case static_cast<int>(CoreNumber::CLIENT_WOTLK):
-        cout << "MaNGOSTwo" << endl;
-        break;
-    case static_cast<int>(CoreNumber::CLIENT_CATA):
-        cout << "MaNGOSThree" << endl;
-        break;
-    case static_cast<int>(CoreNumber::CLIENT_MOP):
-        cout << "MaNGOSFour" << endl;
-        break;
-    case static_cast<int>(CoreNumber::CLIENT_WOD):
-        cout << "MaNGOSFive" << endl;
-        break;
-    case static_cast<int>(CoreNumber::CLIENT_LEGION):
-        cout << "MaNGOSSix" << endl;
-        break;
-    default:
-        cout << "Unknown Version" << endl;
-        break;
-    }
-    cout << "  ________________________________________________" << endl;
-
 }

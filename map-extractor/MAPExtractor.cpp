@@ -64,7 +64,7 @@ class MapExtractor : ExtractorCommon {
  */
 MapExtractor::MapExtractor(int argc, char **argv)
 {
-    showBanner("map-extractor");
+	showWebsiteBanner();
 
     try
     {
@@ -75,7 +75,6 @@ MapExtractor::MapExtractor(int argc, char **argv)
             {
                 i++;
                 input_path = new string(argv[i]);
-                cout << input_path << endl;
             }
             else if (arg->compare("-o") == 0 || arg->compare("--output") == 0)
             {
@@ -118,12 +117,12 @@ MapExtractor::MapExtractor(int argc, char **argv)
     }
 
     // choice
-    cout << "Selected Options:" << endl;
-    cout << "Input Path: " << input_path->c_str() << endl;
-    cout << "Output Path: "<<  output_path->c_str() << endl;
-    cout << "Flat export: " << (map_float_to_int ? "true" : "false") << endl;
-    cout << "Extract dbc: " << (extract_dbc  ? "true" : "false") << endl;
-    cout << "Extract maps: " << (extract_maps ? "true" : "false") << endl;
+    cout << "Selected Options:" << endl << endl;
+    cout << " Input Path: " << input_path->c_str() << endl;
+    cout << " Output Path: "<<  output_path->c_str() << endl;
+    cout << " Flat export: " << (map_float_to_int ? "true" : "false") << endl;
+    cout << " Extract dbc: " << (extract_dbc  ? "true" : "false") << endl;
+    cout << " Extract maps: " << (extract_maps ? "true" : "false") << endl;
 
     if (!extract_dbc && !extract_maps) {
         cout << "Please make a choice of extract!" << endl;
@@ -156,42 +155,44 @@ MapExtractor::Usage(const char *exec)
 bool 
 MapExtractor::hasGameIdenty()
 {
+    cout << endl;
     client_identy = getClientIdentiy(input_path->c_str());
     LoadCommonMPQFiles(getCoreNumberByClientIdentiy(client_identy));
     return (client_identy ? true : false);
 }
 
-void MapExtractor::LoadCommonMPQFiles(CoreNumber core)
+void
+MapExtractor::LoadCommonMPQFiles(CoreNumber core)
 {
     std::stringstream filename;
     ifstream *rf = nullptr;
 
     vector<string> kList = MPQList[static_cast<int>(core)];
 
-    for(int i=0; i < kGameLocales.size();i++) {
+    for(int i=0; i < kGameLocals.size();i++) {
         filename.str("");
-        filename << input_path->c_str() << "/Data/" << kGameLocales[i] << "/locale-" << kGameLocales[i] << ".MPQ";
+        filename << input_path->c_str() << "/Data/" << kGameLocals[i] << "/locale-" << kGameLocals[i] << ".MPQ";
 
-        rf = new ifstream();
-        rf->open(filename.str(), ios::out | ios::binary);
-        if (rf->is_open())
+        rf = fileExist(filename.str());
+        if (rf)
         {
             rf->close();
             delete(rf);
+            cout << " Found locale " << kGameLocals[i] << endl;
             break;
         }
         delete (rf);
         rf = nullptr;
     }
     if (!rf) {
-        cout << "No locales for this client" << endl;
+        cout << " No locals for this client" << endl;
     }
 
 }
 
 int main(int argc, char **argv)
 {
-    MapExtractor extractor( argc,argv);
+    MapExtractor extractor(argc, argv);
 
     if (!extractor.hasGameIdenty()) {
         exit(1);
