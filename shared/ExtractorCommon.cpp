@@ -38,7 +38,8 @@ ExtractorCommon::fileExist(const std::string& filename)
 {
     ifstream *ifs = new ifstream();
     ifs->open(filename, ios::out | ios::binary);
-        if (ifs->is_open()) {
+        if (ifs->is_open())
+        {
             return ifs;
         }
 
