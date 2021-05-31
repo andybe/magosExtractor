@@ -56,49 +56,6 @@ class DBCFile
          */
         bool open();
 
-        /**
-         * @brief Database exceptions
-         *
-         */
-        class Exception
-        {
-            public:
-                /**
-                 * @brief
-                 *
-                 * @param message
-                 */
-                Exception(const std::string& message): message(message)
-                { }
-                /**
-                 * @brief
-                 *
-                 */
-                virtual ~Exception()
-                { }
-                /**
-                 * @brief
-                 *
-                 * @return const std::string
-                 */
-                const std::string& getMessage() {return message;}
-            private:
-                std::string message; /**< TODO */
-        };
-        /**
-         * @brief
-         *
-         */
-        class NotFound: public Exception
-        {
-            public:
-                /**
-                 * @brief
-                 *
-                 */
-                NotFound(): Exception("Key was not found")
-                { }
-        };
         class Iterator;
         /**
          * @brief Iteration over database

@@ -30,245 +30,218 @@
 
 using namespace std;
 
-constexpr uint32_t
-ExtractorCommon::kCientIdenties[];
+constexpr uint32_t ExtractorCommon::kCientIdenties[];
 
-ifstream *
-ExtractorCommon::fileExist(const std::string& filename)
-{
-    ifstream *ifs = new ifstream();
-    ifs->open(filename, ios::out | ios::binary);
-        if (ifs->is_open())
-        {
-            return ifs;
-        }
+ifstream*
+ExtractorCommon::fileExist(const std::string &filename) {
+	ifstream *ifs = new ifstream();
+	ifs->open(filename, ios::out | ios::binary);
+	if (ifs->is_open()) {
+		return ifs;
+	}
 
-    delete(ifs);
-	return nullptr;
+	delete (ifs);
+	ifs = nullptr;
+	return ifs;
 }
-
 
 /**
-*  This function displays the standard mangos banner to the console
-*
-*  @PARAM sTitle is the Title text (directly under the MaNGOS logo)
-*  @PARAM iCoreNumber is the Core Number
-*/
+ *  This function displays the standard mangos banner to the console
+ *
+ *  @PARAM sTitle is the Title text (directly under the MaNGOS logo)
+ *  @PARAM iCoreNumber is the Core Number
+ */
 void
-ExtractorCommon::showBanner(const string& sTitle, int iCoreNumber)
-{
-    cout << \
-        "        __  __      _  _  ___  ___  ___      " << endl << \
-        "       |  \\/  |__ _| \\| |/ __|/ _ \\/ __|  " << endl << \
-        "       | |\\/| / _` | .` | (_ | (_) \\__ \\  " << endl << \
-        "       |_|  |_\\__,_|_|\\_|\\___|\\___/|___/ " << endl << \
-        endl << \
-        "       " << sTitle;
+ExtractorCommon::showBanner(const string &sTitle, int iCoreNumber) {
+	cout << "        __  __      _  _  ___  ___  ___      " << endl
+			<< "       |  \\/  |__ _| \\| |/ __|/ _ \\/ __|  " << endl
+			<< "       | |\\/| / _` | .` | (_ | (_) \\__ \\  " << endl
+			<< "       |_|  |_\\__,_|_|\\_|\\___|\\___/|___/ " << endl << endl
+			<< "       " << sTitle;
 
-    if (iCoreNumber == 255) {
-        cout << endl << endl;
-        return;
-    }
+	if (iCoreNumber == 255) {
+		cout << endl << endl;
+		return;
+	}
 
-    cout  << " for ";
+	cout << " for ";
 
-    switch (iCoreNumber)
-    {
-    case static_cast<int>(CoreNumber::CLIENT_CLASSIC):
-        cout << "MaNGOSZero" << endl;
-        break;
-    case static_cast<int>(CoreNumber::CLIENT_TBC):
-        cout << "MaNGOSOne" << endl;
-        break;
-    case static_cast<int>(CoreNumber::CLIENT_WOTLK):
-        cout << "MaNGOSTwo" << endl;
-        break;
-    case static_cast<int>(CoreNumber::CLIENT_CATA):
-        cout << "MaNGOSThree" << endl;
-        break;
-    case static_cast<int>(CoreNumber::CLIENT_MOP):
-        cout << "MaNGOSFour" << endl;
-        break;
-    case static_cast<int>(CoreNumber::CLIENT_WOD):
-        cout << "MaNGOSFive" << endl;
-        break;
-    case static_cast<int>(CoreNumber::CLIENT_LEGION):
-        cout << "MaNGOSSix" << endl;
-        break;
-    default:
-        cout << "Unknown Version" << endl;
-        break;
-    }
-    cout << "  ________________________________________________" << endl;
+	switch (iCoreNumber) {
+	case static_cast<int>(CoreNumber::CLIENT_CLASSIC):
+		cout << "MaNGOSZero" << endl;
+		break;
+	case static_cast<int>(CoreNumber::CLIENT_TBC):
+		cout << "MaNGOSOne" << endl;
+		break;
+	case static_cast<int>(CoreNumber::CLIENT_WOTLK):
+		cout << "MaNGOSTwo" << endl;
+		break;
+	case static_cast<int>(CoreNumber::CLIENT_CATA):
+		cout << "MaNGOSThree" << endl;
+		break;
+	case static_cast<int>(CoreNumber::CLIENT_MOP):
+		cout << "MaNGOSFour" << endl;
+		break;
+	case static_cast<int>(CoreNumber::CLIENT_WOD):
+		cout << "MaNGOSFive" << endl;
+		break;
+	case static_cast<int>(CoreNumber::CLIENT_LEGION):
+		cout << "MaNGOSSix" << endl;
+		break;
+	default:
+		cout << "Unknown Version" << endl;
+		break;
+	}
+	cout << "  ________________________________________________" << endl;
 
 }
 void
-ExtractorCommon::showWebsiteBanner()
-{
-    cout << \
-        "  ________________________________________________" << endl << endl << \
-        "    For help and support please visit:            " << endl << \
-        "    Website / Forum / Wiki: https://getmangos.eu  " << endl << \
-        "  ________________________________________________" << endl \
-		<< endl;
+ExtractorCommon::showWebsiteBanner() {
+	cout << "  ________________________________________________" << endl << endl
+			<< "    For help and support please visit:            " << endl
+			<< "    Website / Forum / Wiki: https://getmangos.eu  " << endl
+			<< "  ________________________________________________" << endl
+			<< endl;
 }
 uint32_t
-ExtractorCommon::getClientIdentiy(const string& path)
-{
-    uint32_t client_identity = 0;
-    /* 
-       Find the game binary by name.
-    */
-    ifstream *rf = nullptr;
-    stringstream exec_clients;
-    stringstream filename;
-    for (int i = 0; i < kGameBinaries.size(); i++)
-    {
-        filename.str("");
-        filename << path << "/" << kGameBinaries[i];
-        exec_clients << "'" << kGameBinaries[i] << "'" << " ";
-        rf = fileExist(filename.str());
-        if (rf)
-        {
-            break;
-        }
-        delete (rf);
-        rf = nullptr;
-    }
-    if (!rf)
-    {
-        cout << " Game binary not found (one of)!" << endl;
-        cout << " ( " << exec_clients.str() << ")";
-        exit(1);
-    }
+ExtractorCommon::getClientIdentiy(const string &path) {
+	uint32_t client_identity = 0;
+	/*
+	 Find the game binary by name.
+	 */
+	ifstream *rf = nullptr;
+	stringstream exec_clients;
+	stringstream filename;
+	for (int i = 0; i < kGameBinaries.size(); i++) {
+		filename.str("");
+		filename << path << "/" << kGameBinaries[i];
+		exec_clients << "'" << kGameBinaries[i] << "'" << " ";
+		rf = fileExist(filename.str());
+		if (rf) {
+			break;
+		}
+	}
+	if (rf == nullptr) {
+		cout << " Game binary not found (one of)!" << endl;
+		cout << " ( " << exec_clients.str() << ")";
+		exit(1);
+	}
 
-    cout << " Found game binary " << filename.str() << endl;
+	cout << " Found game binary " << filename.str() << endl;
 
-    /** identity byte **/
-    unsigned char byteSearchBuffer[1];
+	/** identity byte **/
+	unsigned char byteSearchBuffer[1];
 
-    /** byte compare **/
-    string mem;
-    unsigned char preWOTLK[4];
-    unsigned char postTBC[5];
+	/** byte compare **/
+	string mem;
+	unsigned char preWOTLK[4];
+	unsigned char postTBC[5];
 
-    while (rf->good())
-    {
-        rf->read((char *)byteSearchBuffer, 1);
+	while (rf->good()) {
+		rf->read((char*) byteSearchBuffer, 1);
 
-        if (byteSearchBuffer[0] == 0x35 || byteSearchBuffer[0] == 0x36 || byteSearchBuffer[0] == 0x38)
-        {
-            rf->read((char *)preWOTLK, 3);
-            mem =  (char *)preWOTLK;
+		if (byteSearchBuffer[0] == 0x35 || byteSearchBuffer[0] == 0x36
+				|| byteSearchBuffer[0] == 0x38) {
+			rf->read((char*) preWOTLK, 3);
+			mem = (char*) preWOTLK;
 
-            if (mem.compare("875")==0) //  Vanilla (5)875?
-            {
-                client_identity = kCientIdenties[0];
-            }
-            else if (mem.compare("005")==0) //  Vanilla (6)005?
-            {
-                client_identity = kCientIdenties[1];
-            }
-            else if (mem.compare("141")==0) //  Vanilla (6)141?
-            {
-                client_identity = kCientIdenties[2];
-            }
-            else if (mem.compare("606")==0) //  TBC (8)606?
-            {
-                client_identity = kCientIdenties[3];
-            }
-        }
-        else if (byteSearchBuffer[0] == 0x31 || byteSearchBuffer[0] == 0x32 ) 
-        {
+			if (mem.compare("875") == 0) //  Vanilla (5)875?
+					{
+				client_identity = kCientIdenties[0];
+			} else if (mem.compare("005") == 0) //  Vanilla (6)005?
+					{
+				client_identity = kCientIdenties[1];
+			} else if (mem.compare("141") == 0) //  Vanilla (6)141?
+					{
+				client_identity = kCientIdenties[2];
+			} else if (mem.compare("606") == 0) //  TBC (8)606?
+					{
+				client_identity = kCientIdenties[3];
+			}
+		} else if (byteSearchBuffer[0] == 0x31 || byteSearchBuffer[0] == 0x32) {
 
-            rf->read((char *)postTBC, 4);
-            mem =  (char *)postTBC;
+			rf->read((char*) postTBC, 4);
+			mem = (char*) postTBC;
 
-            if ((mem.compare("2340")==0)) // WOTLK (1)2340?
-            {
-                client_identity = kCientIdenties[4];
-            }
-            else if ((mem.compare("5595")==0)) //  CATA (1)5595?
-            {
-                client_identity = kCientIdenties[5];
-            }
-            else if ((mem.compare("8274")==0)) //  MoP (1)8274?
-            {
-                client_identity = kCientIdenties[6];
-            }
-            else if ((mem.compare("8414")==0)) // MoP (1)8414?
-            {
-                client_identity = kCientIdenties[7];
-            }
-            else if ((mem.compare("0740")==0)) //  WOD (2)0740?
-            {
-                client_identity = kCientIdenties[8];
-            }
-            else if ((mem.compare("1355")==0)) //  LEG (2)1355?
-            {
-                client_identity = kCientIdenties[9];
-            }
-        }
+			if ((mem.compare("2340") == 0)) // WOTLK (1)2340?
+			{
+				client_identity = kCientIdenties[4];
+			} else if ((mem.compare("5595") == 0)) //  CATA (1)5595?
+			{
+				client_identity = kCientIdenties[5];
+			} else if ((mem.compare("8274") == 0)) //  MoP (1)8274?
+			{
+				client_identity = kCientIdenties[6];
+			} else if ((mem.compare("8414") == 0)) // MoP (1)8414?
+			{
+				client_identity = kCientIdenties[7];
+			} else if ((mem.compare("0740") == 0)) //  WOD (2)0740?
+			{
+				client_identity = kCientIdenties[8];
+			} else if ((mem.compare("1355") == 0)) //  LEG (2)1355?
+			{
+				client_identity = kCientIdenties[9];
+			}
+		}
 
-        if (client_identity != 0)
-        {
-            break;
-        }
-    }
+		if (client_identity != 0) {
+			break;
+		}
+	}
 
-    rf->close();
-    delete (rf);
+	rf->close();
+	delete (rf);
 
-    if (client_identity == 0)
-    {
-        cout << " Fatal Error: failed to identify build version!" << endl << endl;
-        cout << " Supported build versions:" << endl;
-        cout << " 0 - Vanilla: 5875, 6005, 6141" << endl;
-        cout << " 1 - TBC:      8606" << endl;
-        cout << " 2 - WOTLK:    12340" << endl;
-        cout << " 3 - CATA:     15595" << endl;
-        cout << " 4 - MOP:      18274/18414 " << endl;
-        cout << " 5 - WOD:      20740" << endl;
-        cout << " 6 - LEG:      21355" << endl;
-        cout << " Exiting program!!" << endl;
-        exit(1);
-    }
-    int core = static_cast<int>(getCoreNumberByClientIdentiy(client_identity));
-    cout << " Client: World of Warcraft - " << kTitles[core] << " (" << client_identity  << ")" <<  endl;
+	if (client_identity == 0) {
+		cout << " Fatal Error: failed to identify build version!" << endl
+				<< endl;
+		cout << " Supported build versions:" << endl;
+		cout << " 0 - Vanilla: 5875, 6005, 6141" << endl;
+		cout << " 1 - TBC:      8606" << endl;
+		cout << " 2 - WOTLK:    12340" << endl;
+		cout << " 3 - CATA:     15595" << endl;
+		cout << " 4 - MOP:      18274/18414 " << endl;
+		cout << " 5 - WOD:      20740" << endl;
+		cout << " 6 - LEG:      21355" << endl;
+		cout << " Exiting program!!" << endl;
+		exit(1);
+	}
+	int core = static_cast<int>(getCoreNumberByClientIdentiy(client_identity));
+	cout << " Client: World of Warcraft - " << kTitles[core] << " ("
+			<< client_identity << ")" << endl;
 
-    return client_identity;
+	return client_identity;
 }
 
-ExtractorCommon::CoreNumber 
-ExtractorCommon::getCoreNumberByClientIdentiy(uint32_t ci)
-{
-    switch (ci)
-    {
-    case kCientIdenties[0]:
-    case kCientIdenties[1]:
-    case kCientIdenties[2]:
-        return CoreNumber::CLIENT_CLASSIC;
-        break;
-    case kCientIdenties[3]:
-        return CoreNumber::CLIENT_TBC;
-        break;
-    case kCientIdenties[4]:
-        return CoreNumber::CLIENT_WOTLK;
-        break;
-    case kCientIdenties[5]:
-        return CoreNumber::CLIENT_CATA;
-        break;
-    case kCientIdenties[6]:
-    case kCientIdenties[7]:
-        return CoreNumber::CLIENT_MOP;
-        break;
-    case kCientIdenties[8]:
-        return CoreNumber::CLIENT_WOD;
-        break;
-    case kCientIdenties[9]:
-        return CoreNumber::CLIENT_LEGION;
-        break;
-    }
+ExtractorCommon::CoreNumber
+ExtractorCommon::getCoreNumberByClientIdentiy(
+		uint32_t ci) {
+	switch (ci) {
+	case kCientIdenties[0]:
+	case kCientIdenties[1]:
+	case kCientIdenties[2]:
+		return CoreNumber::CLIENT_CLASSIC;
+		break;
+	case kCientIdenties[3]:
+		return CoreNumber::CLIENT_TBC;
+		break;
+	case kCientIdenties[4]:
+		return CoreNumber::CLIENT_WOTLK;
+		break;
+	case kCientIdenties[5]:
+		return CoreNumber::CLIENT_CATA;
+		break;
+	case kCientIdenties[6]:
+	case kCientIdenties[7]:
+		return CoreNumber::CLIENT_MOP;
+		break;
+	case kCientIdenties[8]:
+		return CoreNumber::CLIENT_WOD;
+		break;
+	case kCientIdenties[9]:
+		return CoreNumber::CLIENT_LEGION;
+		break;
+	}
 
-    return CoreNumber::CLIENT_UNKNOWN;  
+	return CoreNumber::CLIENT_UNKNOWN;
 }

@@ -52,7 +52,7 @@ protected:
     void showWebsiteBanner();
     void showBanner(const std::string& sTitle, int iCoreNumber = 255);
 
-    ifstream * fileExist(const std::string& filename);
+    ifstream * fileExist(const std::string&);
 
     uint32_t getClientIdentiy(const string& path);
     CoreNumber getCoreNumberByClientIdentiy(uint32_t client_identity);

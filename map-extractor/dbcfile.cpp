@@ -44,10 +44,11 @@ DBCFile::DBCFile(HANDLE file) : fileHandle(file), data(0)
 
 bool DBCFile::open()
 {
-    unsigned char header[4];
-    unsigned int na, nb, es, ss;
+	const static int BYTES = 4;
+    unsigned char header[BYTES];
+    unsigned int rcount, fcount, rsize, ssize;
 
-    if (!SFileReadFile(fileHandle, header, 4, NULL, NULL))              // Magic header
+    if (!SFileReadFile(fileHandle, header, BYTES, NULL, NULL))              // Magic header
     {
         SFileCloseFile(fileHandle);
         cout << "Could not read header in DBCFile  " << filename << "." << endl;
@@ -61,39 +62,39 @@ bool DBCFile::open()
         return false;
     }
 
-    if (!SFileReadFile(fileHandle, &na, 4, NULL, NULL))                 // Number of records
+    if (!SFileReadFile(fileHandle, &rcount, BYTES, NULL, NULL))                 // Number of records
     {
         SFileCloseFile(fileHandle);
         cout << "Could not read number of records from DBCFile " << filename << "." << endl;
         return false;
     }
 
-    if (!SFileReadFile(fileHandle, &nb, 4, NULL, NULL))                 // Number of fields
+    if (!SFileReadFile(fileHandle, &fcount, BYTES, NULL, NULL))                 // Number of fields
     {
         SFileCloseFile(fileHandle);
         cout << "Could not read number of fields from DBCFile << " << filename << "." << endl;
         return false;
     }
 
-    if (!SFileReadFile(fileHandle, &es, 4, NULL, NULL))                 // Size of a record
+    if (!SFileReadFile(fileHandle, &rsize, BYTES, NULL, NULL))                 // Size of a record
     {
         SFileCloseFile(fileHandle);
         cout << "Could not read record size from DBCFile " << filename << "." << endl;
         return false;
     }
 
-    if (!SFileReadFile(fileHandle, &ss, 4, NULL, NULL))                 // String size
+    if (!SFileReadFile(fileHandle, &ssize, BYTES, NULL, NULL))                 // String size
     {
         SFileCloseFile(fileHandle);
         cout << "Could not read string block size from DBCFile " << filename << "." <<  endl;
         return false;
     }
 
-    recordSize = es;
-    recordCount = na;
-    fieldCount = nb;
-    stringSize = ss;
-    if (fieldCount * 4 != recordSize)
+    recordSize = rsize;
+    recordCount = rcount;
+    fieldCount = fcount;
+    stringSize = ssize;
+    if (fieldCount * BYTES != recordSize)
     {
         SFileCloseFile(fileHandle);
         cout << "Field count and record size in DBCFile " << filename << " do not match." << endl;
