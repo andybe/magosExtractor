@@ -113,7 +113,7 @@ ExtractorCommon::showWebsiteBanner()
 		<< endl;
 }
 uint32_t
-ExtractorCommon::getClientIdentiy(const char *path)
+ExtractorCommon::getClientIdentiy(const string& path)
 {
     uint32_t client_identity = 0;
     /* 
@@ -121,9 +121,10 @@ ExtractorCommon::getClientIdentiy(const char *path)
     */
     ifstream *rf = nullptr;
     stringstream exec_clients;
+    stringstream filename;
     for (int i = 0; i < kGameBinaries.size(); i++)
     {
-        stringstream filename;
+        filename.str("");
         filename << path << "/" << kGameBinaries[i];
         exec_clients << "'" << kGameBinaries[i] << "'" << " ";
         rf = fileExist(filename.str());
@@ -140,6 +141,8 @@ ExtractorCommon::getClientIdentiy(const char *path)
         cout << " ( " << exec_clients.str() << ")";
         exit(1);
     }
+
+    cout << " Found game binary " << filename.str() << endl;
 
     /** identity byte **/
     unsigned char byteSearchBuffer[1];

@@ -54,7 +54,7 @@ protected:
 
     ifstream * fileExist(const std::string& filename);
 
-    uint32_t getClientIdentiy(const char *path);
+    uint32_t getClientIdentiy(const string& path);
     CoreNumber getCoreNumberByClientIdentiy(uint32_t client_identity);
 
     const string kTitles [7] { "Classic", "The Burning Bruscade", "Warth of the Lich King", "Cataclym", "Mist of Pandaria","Warlords of Draenor", "Legion"};

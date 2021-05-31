@@ -157,7 +157,8 @@ MapExtractor::hasGameIdenty()
 {
     cout << endl;
     client_identy = getClientIdentiy(input_path->c_str());
-    LoadCommonMPQFiles(getCoreNumberByClientIdentiy(client_identy));
+    LoadCommonMPQFiles(getCoreNumberByClientIdentiy(static_cast<int>(client_identy)));
+    showBanner("DBC EXtractor & Map Generator");
     return (client_identy ? true : false);
 }
 
@@ -185,7 +186,7 @@ MapExtractor::LoadCommonMPQFiles(CoreNumber core)
         rf = nullptr;
     }
     if (!rf) {
-        cout << " No locals for this client" << endl;
+        cout << " No locals for this client" <<  endl << endl;
     }
 
 }
