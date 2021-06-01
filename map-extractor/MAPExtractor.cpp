@@ -24,8 +24,11 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <regex>
 
 #include "ExtractorCommon.hh"
+
+#include "loadlib.h"
 
 using namespace std;
 
@@ -33,7 +36,7 @@ using namespace std;
 class MapExtractor : ExtractorCommon {
     public:
         MapExtractor(int , char **);
-        ~MapExtractor(){};
+        ~MapExtractor();
 
         bool hasGameIdenty();
 
@@ -130,6 +133,11 @@ MapExtractor::MapExtractor(int argc, char **argv)
     }
 }
 
+MapExtractor::~MapExtractor()
+{
+    CloseArchives();
+};
+
 /**
  * @brief
  *
@@ -167,6 +175,7 @@ MapExtractor::LoadCommonMPQFiles(CoreNumber core)
 {
     std::stringstream filename;
     ifstream *rf = nullptr;
+    string locale = "";
 
     vector<string> kList = MPQList[static_cast<int>(core)];
 
@@ -177,16 +186,40 @@ MapExtractor::LoadCommonMPQFiles(CoreNumber core)
         rf = fileExist(filename.str());
         if (rf)
         {
-            rf->close();
-            delete(rf);
-            cout << " Found locale " << kGameLocals[i] << endl;
+            locale = kGameLocals[i];
+            cout << " Found locale: " << locale << endl;
             break;
         }
-        delete (rf);
-        rf = nullptr;
     }
     if (!rf) {
         cout << " No locals for this client" <<  endl << endl;
+        exit(1);
+    }
+    //close the fileExist
+    rf->close();
+    delete(rf);
+    // Loading MPQ in reverse-order.
+    for (int i = (kList.size() - 1); i >= 0; i--)
+    {
+        filename.str("");
+        filename << input_path->c_str() << "/Data/" << kList[i];
+        // replace %s elements with real language
+        string mpqfile = regex_replace(filename.str(), regex("\\%s"), locale);
+
+        if ((rf = fileExist(mpqfile)))
+        {
+            rf->close();
+            delete(rf);
+            HANDLE fileHandle;
+            // push the MPQ file handler on the stack
+            if (!OpenArchive(mpqfile.c_str(), &fileHandle))
+            {
+                // files incomplete
+                cout << " Error missing client file: "<< mpqfile << endl;
+                CloseArchives();
+                exit(1);
+            }
+        }
     }
 
 }

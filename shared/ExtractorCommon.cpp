@@ -118,6 +118,7 @@ ExtractorCommon::getClientIdentiy(const string &path) {
 		exec_clients << "'" << kGameBinaries[i] << "'" << " ";
 		rf = fileExist(filename.str());
 		if (rf) {
+			cout << " Game file: " << kGameBinaries[i] << endl;
 			break;
 		}
 	}
@@ -126,8 +127,6 @@ ExtractorCommon::getClientIdentiy(const string &path) {
 		cout << " ( " << exec_clients.str() << ")";
 		exit(1);
 	}
-
-	cout << " Found game binary " << filename.str() << endl;
 
 	/** identity byte **/
 	unsigned char byteSearchBuffer[1];
